@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.10/dist/vue.js"></script>
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="./assets/js/index.js"></script>
+    <script src="./assets/js/vue-resource.min.js"></script>
+    <script src='https://docs.opencv.org/4.5.5/opencv.js'></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="./main.css">
+    <title>人工智能应用BS架构展示</title>
+</head>
+
+<body>
+    <div id="app">
+        <el-container style="height: 900px; border: 1px solid #eee">
+            <el-header>
+                <el-row>
+                    <el-col :span="6">
+                        <div style="vertical-align: middle;line-height: 20px;">
+                            <span>
+                                <img src="./assets/img/Beaker.svg" fit="fill" style="height: 60px;" align="absmiddle">
+                                </img>
+                            </span>
+                            <span style="font-size: 20px;">
+                                浊度检测系统
+                            </span>
+                        </div>
+                    </el-col>
+                    <el-col :span="18">
+
+                    </el-col>
+                </el-row>
+
+
+            </el-header>
+            <el-main>
+                <el-tabs v-model="activeTabName" @tab-click="TabClick">
+                    <el-tab-pane label="选取照片" name="1" id="tab1">
+                        <el-upload action="#" list-type="picture-card" :auto-upload="false" :multiple="false"
+                            :on-remove="RemovePicture" :on-preview="PictureCardPreview" :on-change="FileChange">
+                            <i slot="default" class="el-icon-plus"></i>
+                        </el-upload>
+                        <el-dialog :visible.sync="dialogVisible">
+                            <div style="font-size: 17px;line-height: 20px;text-align: center;">{{dialogImageName}}</div>
+                            <br>
+                            <img width="100%" :src="dialogImageUrl">
+                        </el-dialog>
+                        <br>
+                    </el-tab-pane>
+                    <el-tab-pane label="图像预处理" name="2" id="tab2">
+                        <el-container>
+                            <div>
+                                <div>
+                                    <el-button-group>
+                                        <el-button type="primary" @click="ImgCvt2Gray">灰度化</el-button>
+                                        <el-button type="primary" @click="ImgMidFilter">中值滤波</el-button>
+                                        <el-button type="primary" @click="ImgGaussianFilter">高斯滤波</el-button>
+                                        <el-button type="primary" @click="ImgClearEffect">原图</el-button>
+                                    </el-button-group>
+                                </div>
+                                <br>
+                                <span>
+                                    <canvas id="origin" style="height: 1px;width: 1px;float: none;">
+                                    </canvas>
+                                </span>
+                                <span>
+                                    <canvas id="process" style="height: 1px;width: 1px;">
+                                    </canvas>
+                                </span>
+                            </div>
+                        </el-container>
+
+
+                    </el-tab-pane>
+                    <el-tab-pane label="上传检测" name="3">
+                        <div>
+                            <div>
+                                <el-button type="primary" @click="ConfirmUpload">确认上传</el-button>
+                            </div>
+                            <br>
+                            <div>
+                                <canvas id="detected" style="height: 1px;width: 1px;">
+                                </canvas>
+                            </div>
+                        </div>
+                    </el-tab-pane>
+                    <br>
+                    <el-steps :active="stepActiveNum" id="tab3">
+                        <el-step title="步骤 1" description="选取待检测的图片"></el-step>
+                        <el-step title="步骤 2" description="进行图像预处理"></el-step>
+                        <el-step title="步骤 3" description="上传图片完成检测"></el-step>
+                    </el-steps>
+                </el-tabs>
+
+            </el-main>
+        </el-container>
+
+        <el-backtop></el-backtop>
+
+    </div>
+
+    <script src="./main.js"></script>
+</body>
+
+</html>
